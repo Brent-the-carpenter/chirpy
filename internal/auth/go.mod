@@ -1,4 +1,4 @@
-module github.com/Brent-the-carpenter/internal/auth
+module github.com/Brent-the-carpenter/chirpy/internal/auth
 
 go 1.23.3
 
