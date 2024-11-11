@@ -2,13 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/Brent-the-carpenter/chirp/internal/auth"
+	"github.com/Brent-the-carpenter/chirpy/internal/database"
+	"github.com/google/uuid"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/Brent-the-carpenter/chirpy/internal/auth"
-	"github.com/Brent-the-carpenter/chirpy/internal/database"
-	"github.com/google/uuid"
 )
 
 type User struct {
