@@ -11,5 +11,6 @@ func handlerReadyCheck(res http.ResponseWriter, req *http.Request) {
 	_, err := res.Write([]byte("OK"))
 	if err != nil {
 		log.Printf("Error responding to request: %s", err)
+		return
 	}
 }

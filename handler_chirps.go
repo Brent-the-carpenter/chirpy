@@ -47,6 +47,7 @@ func (state *apiConfig) createChirp(res http.ResponseWriter, req *http.Request) 
 	})
 	if err != nil {
 		respondWithError(res, http.StatusInternalServerError, "Unable to save chirp to database", err)
+		return
 	}
 
 	respondWithJSON(res, http.StatusCreated, returnVals{
@@ -89,6 +90,7 @@ func (state *apiConfig) handlerGetAllChirps(res http.ResponseWriter, req *http.R
 			http.StatusInternalServerError,
 			http.StatusText(http.StatusInternalServerError),
 			err)
+		return
 	}
 	chirps := make(returnVals, len(chirpRecords))
 	for index, c := range chirpRecords {
@@ -116,14 +118,17 @@ func (state *apiConfig) handlerGetChirp(res http.ResponseWriter, req *http.Reque
 	urlParam := req.PathValue("chirpID")
 	if urlParam == "" {
 		respondWithError(res, http.StatusBadRequest, http.StatusText(http.StatusBadRequest), nil)
+		return
 	}
 	chirpID, err := uuid.Parse(urlParam)
 	if err != nil {
 		respondWithError(res, 500, "Invalid chirp id", err)
+		return
 	}
 	c, err := state.db.GetChirp(req.Context(), chirpID)
 	if err != nil {
 		respondWithError(res, 404, "chirp not found", nil)
+		return
 	}
 
 	respondWithJSON(res, 200, chirp{

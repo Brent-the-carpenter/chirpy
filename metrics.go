@@ -26,5 +26,6 @@ func (state *apiConfig) handlerNumOfVisits(res http.ResponseWriter, req *http.Re
 		</html>`, state.fileserverHits.Load())))
 	if err != nil {
 		log.Printf("Error responding to request at %v: %v", req.URL.Path, err)
+		return
 	}
 }

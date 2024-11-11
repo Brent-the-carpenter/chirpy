@@ -9,11 +9,13 @@ func (state *apiConfig) handlerResetVisits(res http.ResponseWriter, req *http.Re
 	state.fileserverHits.Store(0)
 	if state.platform != "dev" {
 		respondWithError(res, http.StatusForbidden, http.StatusText(http.StatusForbidden), nil)
+		return
 	}
 	err := state.db.DeleteUsers(req.Context())
 	if err != nil {
 		log.Printf("error deleting all users . %v", err)
 		respondWithError(res, http.StatusInternalServerError, "Couldn't delete users", err)
+		return
 	}
 
 	res.Header().Add("Content-Type", "text/plain; charset=utf-8")
