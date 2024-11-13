@@ -11,16 +11,22 @@ import (
 )
 
 type User struct {
-	ID        uuid.UUID `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Email     string    `json:"email"`
+	Email        string    `json:"email"`
+	Token        string    `json:"token"`
+	RefreshToken string    `json:"refresh_token"`
+	ID           uuid.UUID `json:"id"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
+	ChirpyRed    bool      `json:"is_chirpy_red"`
 }
 
 func (state *apiConfig) handlerCreateUser(res http.ResponseWriter, req *http.Request) {
 	type params struct {
 		Email    string `json:"email" `
 		Password string `json:"password"`
+	}
+	type response struct {
+		User
 	}
 
 	parameters := params{}
@@ -37,6 +43,7 @@ func (state *apiConfig) handlerCreateUser(res http.ResponseWriter, req *http.Req
 			err)
 		return
 	}
+
 	if parameters.Email == "" || parameters.Password == "" {
 		respondWithError(res, http.StatusBadRequest, "missing email or password parameter", nil)
 		return
@@ -57,10 +64,13 @@ func (state *apiConfig) handlerCreateUser(res http.ResponseWriter, req *http.Req
 		respondWithError(res, http.StatusInternalServerError, "Error saving user", err)
 		return
 	}
-	respondWithJSON(res, http.StatusCreated, User{
-		ID:        newUser.ID,
-		CreatedAt: newUser.CreatedAt,
-		UpdatedAt: newUser.UpdatedAt,
-		Email:     newUser.Email,
+	respondWithJSON(res, http.StatusCreated, response{
+		User{
+			ID:        newUser.ID,
+			CreatedAt: newUser.CreatedAt,
+			UpdatedAt: newUser.UpdatedAt,
+			Email:     newUser.Email,
+			ChirpyRed: newUser.IsChirpyRed.Bool,
+		},
 	})
 }

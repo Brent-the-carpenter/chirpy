@@ -14,11 +14,28 @@ INSERT INTO chirps(
 )RETURNING *;
 
 
--- name: GetAllChirps :many
+-- name: GetAllChirpsAsc :many
 
-SELECT * FROM chirps ORDER BY created_at ASC;
+SELECT * FROM chirps ORDER BY created_at ASC ;
+
+-- name: GetAllChirpsDesc :many
+
+SELECT * FROM chirps ORDER BY created_at DESC ;
+
+
+-- name: GetChirpsForUserAsc :many
+SELECT * FROM chirps WHERE user_id = $1 ORDER BY created_at ASC ;
+
+-- name: GetChirpsForUserDesc :many
+SELECT * FROM chirps WHERE user_id = $1 ORDER BY created_at DESC;
+
 
 
 -- name: GetChirp :one
 
 SELECT * FROM chirps WHERE id = $1;
+
+
+-- name: DeleteChirp :exec
+DELETE FROM chirps
+WHERE id = $1;

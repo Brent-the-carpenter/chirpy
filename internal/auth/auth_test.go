@@ -4,25 +4,57 @@ import (
 	"testing"
 )
 
-func TestHashPassword(t *testing.T) {
-	password := "IamtheGreatestDev"
-	pass2 := "Iamtheworstcatdad"
+func TestCheckPasswordHash(t *testing.T) {
+	// First, we need to create some hashed passwords for testing
+	password1 := "correctPassword123!"
+	password2 := "anotherPassword456!"
+	hash1, _ := HashPassword(password1)
+	hash2, _ := HashPassword(password2)
 
-	hash, err := HashPassword(password)
-
-	if password == hash {
-		t.Errorf("Password and hash are the same. Expected to be different.")
+	tests := []struct {
+		name     string
+		password string
+		hash     string
+		wantErr  bool
+	}{
+		{
+			name:     "Correct password",
+			password: password1,
+			hash:     hash1,
+			wantErr:  false,
+		},
+		{
+			name:     "Incorrect password",
+			password: "wrongPassword",
+			hash:     hash1,
+			wantErr:  true,
+		},
+		{
+			name:     "Password doesn't match different hash",
+			password: password1,
+			hash:     hash2,
+			wantErr:  true,
+		},
+		{
+			name:     "Empty password",
+			password: "",
+			hash:     hash1,
+			wantErr:  true,
+		},
+		{
+			name:     "Invalid hash",
+			password: password1,
+			hash:     "invalidhash",
+			wantErr:  true,
+		},
 	}
 
-	err = CheckPasswordHash(password, hash)
-
-	if err != nil {
-		t.Errorf("Password did not produce hash. expected nil")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := CheckPasswordHash(tt.password, tt.hash)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CheckPasswordHash() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
-
-	err = CheckPasswordHash(pass2, hash)
-	if err == nil {
-		t.Errorf("CheckPassword was supposed to return error, instead got nil")
-	}
-
 }
