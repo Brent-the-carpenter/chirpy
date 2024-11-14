@@ -20,7 +20,6 @@ func (state *apiConfig) handleLogin(res http.ResponseWriter, req *http.Request) 
 		User
 	}
 
-	defer req.Body.Close()
 	params := parameters{}
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&params)

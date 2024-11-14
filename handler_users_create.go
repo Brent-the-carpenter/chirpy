@@ -31,8 +31,6 @@ func (state *apiConfig) handlerCreateUser(res http.ResponseWriter, req *http.Req
 
 	parameters := params{}
 
-	defer req.Body.Close()
-
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&parameters)
 	if err != nil {

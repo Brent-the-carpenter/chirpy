@@ -29,7 +29,6 @@ func (state *apiConfig) handlerUpdateUser(res http.ResponseWriter, req *http.Req
 		return
 	}
 
-	defer req.Body.Close()
 	params := parameters{}
 	decoder := json.NewDecoder(req.Body)
 	err = decoder.Decode(&params)

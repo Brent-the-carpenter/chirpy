@@ -28,7 +28,6 @@ func (state *apiConfig) createChirp(res http.ResponseWriter, req *http.Request) 
 	}
 
 	parameters := params{}
-	defer req.Body.Close()
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&parameters)
 	if err != nil {
